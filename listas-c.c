@@ -31,6 +31,8 @@ struct str_union_item{
     ptr_str_union_item siguiente;  
 };
 
+// A BIG TODO
+
 /*
 Se ha definido un elemnto que tiene un libro o una revista, un tipo y un puntero a otro elemento igual que el que se ha definido.
 
