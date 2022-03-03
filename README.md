@@ -1,3 +1,3 @@
-# estoy-estudiando-c
+# uni
 
-programing notes on the C programming language.
+colleage notes on comp sci 
