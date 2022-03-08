@@ -26,7 +26,10 @@ En el main se define la lista como T_Manejador manej; (un puntero a una structur
 ¿Porqué se pasa un puntero a T_Manejador? ¿Que pasa si pasamos T_Manejador y no un puntero a T_Manejador y cambiamos su valor (su valor es una zona de memporia)?
 */
 void crear(T_Manejador* manejador){         
-	
+	*manejador = (struct T_Nodo*) malloc(sizeof(struct T_Nodo));	
+	(*manejador)->inicio = 0;
+	(*manejador)->fin = MAX - 1;
+	(*manejador)->sig = NULL;
 }
 
 /* Destruye la estructura utilizada (libera todos los nodos de la lista. El par�metro manejador debe terminar apuntando a NULL 
@@ -35,7 +38,14 @@ Consejo: Para saber si te estas dejando memoria por ahí, en el main crea un buc
 
 */
 void destruir(T_Manejador* manejador){
-    ;
+	struct T_Nodo *actual = *manejador;
+	struct T_Nodo *sig;
+	while (actual != NULL) {
+		sig = actual->sig;
+		free(actual);
+		actual = sig;
+	}
+	*manejador = NULL;
 }
 
 /* Devuelve en �dir� la dirección de memoria �simulada� (unsigned) donde comienza el trozo de memoria continua de tamaño �tam� solicitada.
@@ -48,7 +58,7 @@ void obtener(T_Manejador *manejador, unsigned tam, unsigned* dir, unsigned* ok){
 /* Muestra el estado actual de la memoria, bloques de memoria libre */
 void mostrar (T_Manejador manejador){
   while(manejador != NULL){
-	  printf("Inicio: %i %i \n", manejador->inicio, manejador->fin); 
+	  printf("Inicio: %i Fin: %i \n", manejador->inicio, manejador->fin); 
 	  manejador = (manejador) -> sig;
   }
 }
