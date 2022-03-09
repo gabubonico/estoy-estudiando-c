@@ -29,5 +29,11 @@ Libera todos los episodios que son anteriores a la fecha dada. Devuelve el núme
 /* Destruye la estructura utilizada (libera todos los nodos de la lista. El parámetro manejador debe terminar apuntando a NULL */
 
 	void destruir(T_Lista* ptr_lista_head){
-        ;
+		struct T_Nodo *actual = *ptr_lista_head;
+		struct T_Nodo *sig;
+		while (sig != NULL) {
+			sig = actual->sig;
+			free(actual);
+			actual = sig;
+		}
     }
