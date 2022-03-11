@@ -17,7 +17,11 @@ void Crear(T_Arbol* arbol_ptr){
 // Destruye la estructura utilizada.
 // recursividad: primero se propaga y luego se libera
 void Destruir(T_Arbol *arbol_ptr){
-
+	if ((*arbol_ptr)->izq != NULL && (*arbol_ptr)->der != NULL) {
+		Destruir((*arbol_ptr)->izq);	
+		Destruir((*arbol_ptr)->der);	
+	}
+	free(arbol_ptr);
 }
 
 // Inserta num en el arbol
