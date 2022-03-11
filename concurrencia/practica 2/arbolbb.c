@@ -11,10 +11,11 @@
 
 // Inicializa la estructura a NULL.
 void Crear(T_Arbol* arbol_ptr){
-
+	arbol_ptr = NULL;
 }
 
 // Destruye la estructura utilizada.
+// recursividad: primero se propaga y luego se libera
 void Destruir(T_Arbol *arbol_ptr){
 
 }

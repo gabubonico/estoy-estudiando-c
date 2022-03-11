@@ -8,6 +8,7 @@
  ============================================================================
  */
 
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -24,10 +25,19 @@
 void creafichero_tam_random(char* nfichero, unsigned tam)
 {
 	srand(time(NULL));
-	//rand()%tam;
-		
-
+	unsigned tam_aleatorios[tam];
 	
+	for (size_t i = 0; i < tam; i++) {
+		tam_aleatorios[i] = rand()%tam; 
+	}
+		
+	FILE * ptr_file = fopen(nfichero, "wb");	// write binary
+	if(ptr_file == NULL){
+		perror("fichero creado incorrecto");
+	} else {
+		fwrite(tam_aleatorios, sizeof(unsigned), tam, ptr_file);
+		fclose(ptr_file);
+	}
 }
 /**
  * Muestra por pantalla la lista de números (unsigned int) almacenada
@@ -35,7 +45,19 @@ void creafichero_tam_random(char* nfichero, unsigned tam)
  */
 void muestrafichero(char* nfichero)
 {
-	
+	FILE * ptr_file = fopen(nfichero, "rb");	// read binary
+	if(ptr_file == NULL){
+		perror("fichero no abierto con exito (?)");
+		exit(-1);
+	} else {
+		unsigned basura;
+		while(!feof(ptr_file)){		// metodo general (no sabemos el tamaño) (en este caso si lo sabemos)
+			fread(&basura, sizeof(unsigned), 1, ptr_file);
+			printf("%i ", basura);
+		}
+		printf("\n");
+		fclose(ptr_file);
+	}
 }
 
 /**
@@ -44,7 +66,18 @@ void muestrafichero(char* nfichero)
 
 void cargaFichero(char* nfichero, T_Arbol* miarbol)
 {
-	
+	FILE * ptr_file = fopen(nfichero, "rb");	// read binary
+	if(ptr_file == NULL){
+		perror("fichero no abierto con exito (?)");
+		exit(-1);
+	} else {
+		unsigned basura;
+		while(!feof(ptr_file)){		// metodo general (no sabemos el tamaño) (en este caso si lo sabemos)
+			fread(&basura, sizeof(unsigned), 1, ptr_file);
+			Insertar(miarbol, basura);
+		}
+		fclose(ptr_file);
+	}
 }
 
 int main(void) {
