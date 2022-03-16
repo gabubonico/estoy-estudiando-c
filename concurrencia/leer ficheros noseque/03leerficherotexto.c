@@ -88,13 +88,13 @@ int main(int argc, char const *argv[])
     // Para debugear que estamos haciendo mal! 
     // Nunca sale a la primera :)
     
-    while(fscanf(ptr_file,"",&tipo,titulo,&precio)==3){
+    while(fscanf(ptr_file,"tipo %c, Titulo %s, precio %.2f\n",&tipo,titulo,&precio)==3){
         //Pedimos memoria y rellenamos dependiendo del tipo.
         //Insertamos en la lista por la cola.
         
 		ptr_str_union_item new_element = malloc(sizeof(struct str_union_item));
 		if (new_element == NULL){
-			printf("se ha podido obtener memoria");
+			printf("no se ha podido obtener memoria");
 			fclose(ptr_file);
 			destruir(&lista);
 			exit(-1);
