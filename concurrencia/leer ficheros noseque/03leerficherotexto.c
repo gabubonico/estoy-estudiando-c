@@ -48,6 +48,17 @@ void destruir(ptr_str_union_item * listt){
     *listt == NULL;
 }
 
+void insertar (ptr_str_union_item * lista, ptr_str_union_item * new_element) {
+	if (lista == NULL) {
+		(*lista) = (*new_element);
+	} else {
+		ptr_str_union_item aux = * lista;
+		while (aux->siguiente != NULL) {
+			aux->siguiente = (*new_element); // ESTO DA SEGMENTATION FAULT !!!!	
+		}
+	}
+}
+
 int main(int argc, char const *argv[])
 {
 
@@ -81,6 +92,20 @@ int main(int argc, char const *argv[])
         //Pedimos memoria y rellenamos dependiendo del tipo.
         //Insertamos en la lista por la cola.
         
+		ptr_str_union_item new_element = malloc(sizeof(struct str_union_item));
+		if (new_element == NULL){
+			printf("se ha podido obtener memoria");
+			fclose(ptr_file);
+			destruir(&lista);
+			exit(-1);
+		}
+		if (tipo == 'l'){
+			strcpy(new_element->item.libro.titulo,titulo);	
+			new_element->item.libro.precio = precio;
+		} else {
+			strcpy(new_element, ); // NO SE QUE POLLAS VA AQUI
+		}
+
     }
 
     destruir(&lista);
