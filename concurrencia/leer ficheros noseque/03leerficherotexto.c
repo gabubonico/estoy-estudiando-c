@@ -45,7 +45,7 @@ void destruir(ptr_str_union_item * listt){
         *listt = (*listt)->siguiente;
         free(aux);
     }
-    *listt == NULL;
+    *listt = NULL;
 }
 
 void insertar (ptr_str_union_item * lista, ptr_str_union_item * new_element) {
@@ -88,7 +88,7 @@ int main(int argc, char const *argv[])
     // Para debugear que estamos haciendo mal! 
     // Nunca sale a la primera :)
     
-    while(fscanf(ptr_file,"tipo %c, Titulo %s, precio %.2f\n",&tipo,titulo,&precio)==3){
+    while(fscanf(ptr_file,"tipo %c, Titulo %s, precio %2f\n",&tipo,titulo,&precio)==3){
         //Pedimos memoria y rellenamos dependiendo del tipo.
         //Insertamos en la lista por la cola.
         
@@ -103,9 +103,9 @@ int main(int argc, char const *argv[])
 			strcpy(new_element->item.libro.titulo,titulo);	
 			new_element->item.libro.precio = precio;
 		} else {
-			strcpy(new_element, ); // NO SE QUE POLLAS VA AQUI
+			strcpy(new_element->item.revista.titulo,titulo); 
+			new_element->item.revista.precio = precio; // NO SE SI ESTO ESTA BIEN PORQUE ME LO HE MEDIO INVENTADO PERO SHIT HAPPENS
 		}
-
     }
 
     destruir(&lista);
