@@ -27,7 +27,14 @@ void Destruir(T_Arbol *arbol_ptr){
 // Inserta num en el arbol
 void Insertar(T_Arbol *arbol_ptr,unsigned num)
 {
-	
+	if (arbol_ptr == NULL) {
+		(*arbol_ptr)->dato = num;
+	} else {
+		T_Arbol * aux = * arbol_ptr;
+		while (expression) { // AAAAAAAAAAAAAAAAAAAA
+		statements
+		}
+	}
 	
 	
 }
