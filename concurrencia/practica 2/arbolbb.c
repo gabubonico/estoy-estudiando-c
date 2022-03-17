@@ -25,14 +25,38 @@ void Destruir(T_Arbol *arbol_ptr){
 }
 
 // Inserta num en el arbol
-void Insertar(T_Arbol *arbol_ptr,unsigned num)
+
+int buscar (T_Arbol * a, unsigned num){
+	if (a == NULL) {
+		return 0;
+	} else if ((*a)->dato < num) {
+		return buscar((*a)->der, num);
+	} else if ((*a)->dato > num) {
+		return buscar((*a)->izq, num);
+	} else {
+		return 1;
+	}
+}
+
+void insertar_recursivo(T_Arbol * a, unsigned num) {
+	if (a == NULL) {
+		(*a)->dato = num;
+	} else if ((*a)->dato < num) {
+		insertar_recursivo((*a)->der, num);	
+	} else if ((*a)->dato > num) {
+		insertar_recursivo((*a)->izq, num);	
+	}
+}
+
+void insertar(T_Arbol *arbol_ptr,unsigned num)
 {
 	if (arbol_ptr == NULL) {
 		(*arbol_ptr)->dato = num;
 	} else {
-		T_Arbol * aux = * arbol_ptr;
-		while (expression) { // AAAAAAAAAAAAAAAAAAAA
-		statements
+		if (buscar(arbol_ptr, num) == 1) {
+			exit(0);
+		} else {
+			insertar_recursivo(arbol_ptr, num);
 		}
 	}
 	
