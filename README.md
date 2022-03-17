@@ -1,3 +1,3 @@
 # uni
 
-colleage notes on comp sci 
+college notes on comp sci 
