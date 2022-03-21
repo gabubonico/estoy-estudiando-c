@@ -15,5 +15,5 @@ do
 		mkdir --parents $2/$artista
 	fi
 
-	cp $i $2/$artista/$cancion.mp4
+	cp $i $2/$artista/$cancion.mp3
 done
