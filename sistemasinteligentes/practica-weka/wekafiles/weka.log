@@ -1,0 +1,20 @@
+2022-03-24 11:40:38 weka.gui.GUIChooserApp main
+INFO: Logging started
+2022-03-24 11:40:39 weka.gui.GenericObjectEditor registerEditors
+INFO: ---Registering Weka Editors---
+2022-03-24 11:40:40 weka.experiment.DatabaseUtils initialize
+WARNING: Trying to add database driver (JDBC): jdbc.idbDriver - Warning, not in CLASSPATH?
+2022-03-24 11:40:40 weka.gui.beans.BeansProperties loadProperties
+INFO: [KnowledgeFlow] Loading properties and plugins...
+2022-03-24 11:40:40 weka.gui.beans.KnowledgeFlowApp init
+INFO: [KnowledgeFlow] Initializing KF...
+2022-03-24 11:41:53 weka.gui.explorer.Explorer <init>
+INFO: Weka Explorer
+2022-03-24 11:41:53 weka.gui.explorer.Explorer <init>
+INFO: (c) 1999-2022 The University of Waikato, Hamilton, New Zealand
+2022-03-24 11:41:53 weka.gui.explorer.Explorer <init>
+INFO: web: https://www.cs.waikato.ac.nz/~ml/weka/
+2022-03-24 11:41:53 weka.gui.explorer.Explorer <init>
+INFO: Started on Thursday, 24 March 2022
+2022-03-24 11:42:35 weka.gui.explorer.PreprocessPanel$21 run
+INFO: Base relation is now weather.symbolic (14 instances)
