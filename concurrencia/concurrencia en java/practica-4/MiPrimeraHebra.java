@@ -1,6 +1,6 @@
 public class MiPrimeraHebra implements Runnable {
 
-	private static Character myChar;
+	private Character myChar;
 
 	public MiPrimeraHebra(Character myChar) {
 		this.myChar = myChar;
