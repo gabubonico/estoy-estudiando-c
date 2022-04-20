@@ -52,7 +52,9 @@ void destruir(T_Manejador* manejador){
 Si la operación se pudo llevar a cabo, es decir, existe un trozo con capacidad suficiente, devolvera TRUE (1) en �ok�; FALSE (0) en otro caso.
  */
 void obtener(T_Manejador *manejador, unsigned tam, unsigned* dir, unsigned* ok){
-    ;
+	while(manejador != NULL) {
+		T_Nodo aux = manejador;
+	} 
 }
 
 /* Muestra el estado actual de la memoria, bloques de memoria libre */
