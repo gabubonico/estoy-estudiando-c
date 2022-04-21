@@ -1,0 +1,41 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.functions.MultilayerPerceptron -L 0.3 -M 0.2 -N 2000 -V 10 -S 0 -E 100 -H a
+Relation:     humps2
+Instances:    10
+Attributes:   2
+              x
+              y
+Test mode:    user supplied test set:  size unknown (reading incrementally)
+
+=== Classifier model (full training set) ===
+
+Linear Node 0
+    Inputs    Weights
+    Threshold    0.4122419356400279
+    Node 1    0.2436939336673507
+Sigmoid Node 1
+    Inputs    Weights
+    Threshold    -0.057315357257839525
+    Attrib x    0.05437592093208237
+Class 
+    Input
+    Node 0
+
+
+Time taken to build model: 0.01 seconds
+
+=== Evaluation on test set ===
+
+Time taken to test model on supplied test set: 0 seconds
+
+=== Summary ===
+
+Correlation coefficient                  0.6326
+Mean absolute error                      1.0977
+Root mean squared error                  1.5819
+Relative absolute error                 88.6602 %
+Root relative squared error            108.7174 %
+Total Number of Instances               10     
+
+
