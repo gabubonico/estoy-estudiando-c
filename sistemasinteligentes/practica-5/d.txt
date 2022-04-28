@@ -1,0 +1,182 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.functions.MultilayerPerceptron -L 0.3 -M 0.2 -N 500 -V 0 -S 0 -E 20 -H a
+Relation:     Pumpkin_Seeds_Dataset
+Instances:    2500
+Attributes:   13
+              Area
+              Perimeter
+              Major_Axis_Length
+              Minor_Axis_Length
+              Convex_Area
+              Equiv_Diameter
+              Eccentricity
+              Solidity
+              Extent
+              Roundness
+              Aspect_Ration
+              Compactness
+              Class
+Test mode:    10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Sigmoid Node 0
+    Inputs    Weights
+    Threshold    -3.595490311186832
+    Node 2    4.300540892376024
+    Node 3    2.1824055560433075
+    Node 4    1.3621371677089633
+    Node 5    -3.5382722455499986
+    Node 6    1.2765901404006328
+    Node 7    -2.833202791332686
+    Node 8    -1.8882921237557697
+Sigmoid Node 1
+    Inputs    Weights
+    Threshold    3.595519507682398
+    Node 2    -4.300579158814876
+    Node 3    -2.182589704453731
+    Node 4    -1.3619918177093868
+    Node 5    3.5383442828099425
+    Node 6    -1.2766168998388803
+    Node 7    2.835040953813802
+    Node 8    1.8880366690469699
+Sigmoid Node 2
+    Inputs    Weights
+    Threshold    11.381380808779928
+    Attrib Area    1.3907094788237673
+    Attrib Perimeter    3.315041319990196
+    Attrib Major_Axis_Length    -2.997451874959911
+    Attrib Minor_Axis_Length    7.876121859501484
+    Attrib Convex_Area    2.491137054805032
+    Attrib Equiv_Diameter    6.185196825284903
+    Attrib Eccentricity    4.875591874021104
+    Attrib Solidity    -7.741785656490237
+    Attrib Extent    -1.2529345810224028
+    Attrib Roundness    1.9255354838571885
+    Attrib Aspect_Ration    -7.18747936382351
+    Attrib Compactness    6.364972665945947
+Sigmoid Node 3
+    Inputs    Weights
+    Threshold    4.357907659949007
+    Attrib Area    4.3488880031925765
+    Attrib Perimeter    1.5581581218900182
+    Attrib Major_Axis_Length    -0.2669209751284783
+    Attrib Minor_Axis_Length    6.790398976965309
+    Attrib Convex_Area    4.995634978861881
+    Attrib Equiv_Diameter    6.060312603897644
+    Attrib Eccentricity    1.1513589218214644
+    Attrib Solidity    -7.0975286850563855
+    Attrib Extent    0.637932641689001
+    Attrib Roundness    7.193198666010584
+    Attrib Aspect_Ration    -5.121208942641536
+    Attrib Compactness    4.823374503494573
+Sigmoid Node 4
+    Inputs    Weights
+    Threshold    -0.7957574438826517
+    Attrib Area    0.4032822768959458
+    Attrib Perimeter    -0.9002049358467858
+    Attrib Major_Axis_Length    -1.3105500060053903
+    Attrib Minor_Axis_Length    -0.3346462086041467
+    Attrib Convex_Area    0.583694958205666
+    Attrib Equiv_Diameter    1.52246664458544
+    Attrib Eccentricity    -0.4787780695935083
+    Attrib Solidity    -2.0267015042694543
+    Attrib Extent    -2.561495224888639
+    Attrib Roundness    6.762737384642206
+    Attrib Aspect_Ration    -0.555235183280251
+    Attrib Compactness    3.8019972561993383
+Sigmoid Node 5
+    Inputs    Weights
+    Threshold    -14.239906958644841
+    Attrib Area    6.724183274839269
+    Attrib Perimeter    -8.352873564848698
+    Attrib Major_Axis_Length    7.095467473408265
+    Attrib Minor_Axis_Length    -3.9147221069234726
+    Attrib Convex_Area    5.002425249605707
+    Attrib Equiv_Diameter    -0.8441576601673831
+    Attrib Eccentricity    -5.23086391446063
+    Attrib Solidity    15.505062604731014
+    Attrib Extent    -0.6833339103085704
+    Attrib Roundness    17.56795472150609
+    Attrib Aspect_Ration    14.228380046065215
+    Attrib Compactness    -9.424379876599865
+Sigmoid Node 6
+    Inputs    Weights
+    Threshold    0.6317208501544459
+    Attrib Area    -2.8440121222626153
+    Attrib Perimeter    -4.302184616985027
+    Attrib Major_Axis_Length    -4.115137685966828
+    Attrib Minor_Axis_Length    -3.7468933231641732
+    Attrib Convex_Area    -2.151202528045587
+    Attrib Equiv_Diameter    -1.5926066510467671
+    Attrib Eccentricity    0.11586419481907043
+    Attrib Solidity    -9.43924550826829
+    Attrib Extent    4.094643206034529
+    Attrib Roundness    6.692321874557361
+    Attrib Aspect_Ration    -1.0321776377196756
+    Attrib Compactness    4.787499965308465
+Sigmoid Node 7
+    Inputs    Weights
+    Threshold    -0.33963892751624025
+    Attrib Area    1.2768063364332822
+    Attrib Perimeter    2.2019395081728574
+    Attrib Major_Axis_Length    1.5032904912875449
+    Attrib Minor_Axis_Length    1.507530766758988
+    Attrib Convex_Area    1.5200247811410228
+    Attrib Equiv_Diameter    1.0770499786512302
+    Attrib Eccentricity    -0.5318185985957871
+    Attrib Solidity    -3.483560202391647
+    Attrib Extent    3.079532749128028
+    Attrib Roundness    -2.848620818308142
+    Attrib Aspect_Ration    0.1979183295571494
+    Attrib Compactness    -0.7253334334550989
+Sigmoid Node 8
+    Inputs    Weights
+    Threshold    1.9578230664154876
+    Attrib Area    2.6283377039999745
+    Attrib Perimeter    4.655377537202776
+    Attrib Major_Axis_Length    1.7354332758712092
+    Attrib Minor_Axis_Length    4.393811861123899
+    Attrib Convex_Area    2.8989134036691424
+    Attrib Equiv_Diameter    1.3552147448193648
+    Attrib Eccentricity    0.6925145709102509
+    Attrib Solidity    -2.9447059163107308
+    Attrib Extent    -3.290943993693713
+    Attrib Roundness    -8.168380241201064
+    Attrib Aspect_Ration    -0.6699110023358965
+    Attrib Compactness    -2.3981669767655793
+Class CERCEVELIK
+    Input
+    Node 0
+Class URGUP_SIVRISI
+    Input
+    Node 1
+
+
+Time taken to build model: 2.56 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances        2210               88.4    %
+Incorrectly Classified Instances       290               11.6    %
+Kappa statistic                          0.7673
+Mean absolute error                      0.1614
+Root mean squared error                  0.2964
+Relative absolute error                 32.3312 %
+Root relative squared error             59.3344 %
+Total Number of Instances             2500     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.906    0.140    0.875      0.906    0.890      0.768    0.943     0.927     CERCEVELIK
+                 0.860    0.094    0.894      0.860    0.877      0.768    0.943     0.947     URGUP_SIVRISI
+Weighted Avg.    0.884    0.118    0.884      0.884    0.884      0.768    0.943     0.936     
+
+=== Confusion Matrix ===
+
+    a    b   <-- classified as
+ 1178  122 |    a = CERCEVELIK
+  168 1032 |    b = URGUP_SIVRISI
