@@ -2,7 +2,7 @@ package lago;
 
 public class Lago {
 	private volatile int nivel = 0;
-	private boolean hayDato = false;
+	private volatile boolean hayDato = false;
 
 	public Lago(int valorInicial) {
 		nivel = valorInicial;
