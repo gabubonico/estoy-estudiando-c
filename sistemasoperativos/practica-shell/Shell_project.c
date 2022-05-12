@@ -15,6 +15,11 @@ To compile and run the program:
 **/
 
 #include "job_control.h"   // remember to compile with module job_control.c 
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <string.h>
 
 #define MAX_LINE 256 /* 256 chars per line, per command, should be enough. */
 
@@ -35,7 +40,7 @@ int main(void)
 
 	while (1)   /* Program terminates normally inside get_command() after ^D is typed*/
 	{   		
-		printf("COMMAND->");
+		printf("[gash]$ ");
 		fflush(stdout);
 		get_command(inputBuffer, MAX_LINE, args, &background);  /* get next command */
 		
@@ -48,6 +53,26 @@ int main(void)
 			 (4) Shell shows a status message for processed command 
 			 (5) loop returns to get_commnad() function
 		*/
+
+		pid_fork = fork();
+		if (pid_fork > 0) { //padre
+			if (background == 0) {
+				waitpid(pid_fork, &status, 0);
+				status_res = analyze_status(status, &info);
+				if (info == 0) {
+					printf("Foreground pid: %i, command: %s, Exited, info: %i\n", pid_fork, args[0], info);
+				} else {
+					printf("Foreground pid: %i, command: %s, Suspended, info: %i\n", pid_fork, args[0], info);
+				}
+			} else {
+				printf("Background pid: %i, command: %s\n", pid_fork, args[0]);
+				continue;
+			}	
+		} else { //hijo
+			execvp(inputBuffer, args);
+			printf("Error, command %s not found", args[0]);
+			exit(-1);
+		}
 
 	} // end while
 }
