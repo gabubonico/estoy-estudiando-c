@@ -38,6 +38,8 @@ int main(void)
 	enum status status_res; /* status processed by analyze_status() */
 	int info;				/* info processed by analyze_status() */
 
+	ignore_terminal_signals();
+
 	while (1)   /* Program terminates normally inside get_command() after ^D is typed*/
 	{   		
 		printf("[gash]$ ");
@@ -54,21 +56,32 @@ int main(void)
 			 (5) loop returns to get_commnad() function
 		*/
 
+		if(!strcmp(args[0], "cd")) {
+			chdir(args [1]);
+			continue;
+		}
+
 		pid_fork = fork();
 		if (pid_fork > 0) { //padre
 			if (background == 0) {
-				waitpid(pid_fork, &status, 0);
+				waitpid(pid_fork, &status, WUNTRACED);
+				set_terminal(getpid());
 				status_res = analyze_status(status, &info);
-				if (info == 0) {
-					printf("Foreground pid: %i, command: %s, Exited, info: %i\n", pid_fork, args[0], info);
+				if (status_res == SUSPENDED) {
+					printf("\nForeground pid: %i, command: %s, %s, info: %i\n", pid_fork, args[0], status_strings[status_res], info);
 				} else {
-					printf("Foreground pid: %i, command: %s, Suspended, info: %i\n", pid_fork, args[0], info);
+					printf("\nForeground pid: %i, command: %s, %s, info: %i\n", pid_fork, args[0], status_strings[status_res], info);
 				}
 			} else {
-				printf("Background pid: %i, command: %s\n", pid_fork, args[0]);
+				printf("\nBackground pid: %i, command: %s\n", pid_fork, args[0]);
 				continue;
 			}	
 		} else { //hijo
+			new_process_group(pid_fork); 
+			//se supone que tengo que usar un macro que se llama set_terminal() (libreria adjunta)
+			//tal que if background == 0 set_terminal(pid_fork) pero si lo hago no funciona
+			if (background == 0) set_terminal(pid_fork);
+			restore_terminal_signals();
 			execvp(inputBuffer, args);
 			printf("Error, command %s not found", args[0]);
 			exit(-1);
