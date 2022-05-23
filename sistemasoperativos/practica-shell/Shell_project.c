@@ -15,6 +15,7 @@ To compile and run the program:
 **/
 
 #include "job_control.h"   // remember to compile with module job_control.c 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
@@ -22,6 +23,31 @@ To compile and run the program:
 #include <string.h>
 
 #define MAX_LINE 256 /* 256 chars per line, per command, should be enough. */
+
+job * tareas;
+
+void manejador(int señal) {
+	job * item;
+	int status;
+	int info;
+	int pid_wait = 0;
+	enum status status_res;
+
+	for (int i = 1; i <= list_size(tareas); i++) {
+		item = get_item_bypos(tareas, i);			
+		pid_wait = waitpid(item->pgid, &status, WUNTRACED | WNOHANG);
+		if (pid_wait == item->pgid) {
+			status_res = analyze_status(status, &info);
+			if (status_res == EXITED) {
+				printf("\ncommand %s executed background. Pid %d finished", item->command, item->pgid);		
+				delete_job(tareas, item);
+			} else if (status_res == SUSPENDED) {
+				printf("\ncommand %s executed background. Pid %d suspended", item->command, item->pgid);		
+				item->state = STOPPED;	
+			}	
+		}
+	}
+}
 
 // -----------------------------------------------------------------------
 //                            MAIN          
@@ -38,7 +64,11 @@ int main(void)
 	enum status status_res; /* status processed by analyze_status() */
 	int info;				/* info processed by analyze_status() */
 
+	job * item;
+
 	ignore_terminal_signals();
+	signal(SIGCHLD, manejador);
+	tareas = new_list("tareas");
 
 	while (1)   /* Program terminates normally inside get_command() after ^D is typed*/
 	{   		
@@ -68,19 +98,21 @@ int main(void)
 				set_terminal(getpid());
 				status_res = analyze_status(status, &info);
 				if (status_res == SUSPENDED) {
+					item = new_job(pid_fork, args[0], STOPPED);
+					add_job(tareas, item);
 					printf("\nForeground pid: %i, command: %s, %s, info: %i\n", pid_fork, args[0], status_strings[status_res], info);
 				} else {
 					printf("\nForeground pid: %i, command: %s, %s, info: %i\n", pid_fork, args[0], status_strings[status_res], info);
 				}
 			} else {
+				item = new_job(pid_fork, args[0], STOPPED);
+				add_job(tareas, item);
 				printf("\nBackground pid: %i, command: %s\n", pid_fork, args[0]);
 				continue;
 			}	
 		} else { //hijo
-			new_process_group(pid_fork); 
-			//se supone que tengo que usar un macro que se llama set_terminal() (libreria adjunta)
-			//tal que if background == 0 set_terminal(pid_fork) pero si lo hago no funciona
-			if (background == 0) set_terminal(pid_fork);
+			new_process_group(getpid()); 
+			if (background == 0) set_terminal(getpid());
 			restore_terminal_signals();
 			execvp(inputBuffer, args);
 			printf("Error, command %s not found", args[0]);
