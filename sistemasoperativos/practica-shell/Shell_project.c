@@ -26,7 +26,7 @@ To compile and run the program:
 
 job * tareas;
 
-void manejador(int señal) {
+void manejador (int senal) {
 	job * item;
 	int status;
 	int info;
