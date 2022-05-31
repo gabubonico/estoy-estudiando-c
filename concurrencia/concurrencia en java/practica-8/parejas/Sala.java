@@ -1,5 +1,6 @@
 package parejas;
 
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -10,6 +11,8 @@ public class Sala {
     private Boolean cita=false;
     private Boolean puerta=true;
 
+    private Condition okCitaH = l.newCondition();
+    private Condition okCitaM = l.newCondition();
 
 	/**
 	 * un hombre llega a la sala para formar una pareja si ya hay otra mujer en la
@@ -20,7 +23,7 @@ public class Sala {
 	public synchronized void llegaHombre(int id) throws InterruptedException {
         try {
             l.lock();
-            while(hayHombre || !puerta)wait();
+            while(hayHombre || !puerta) okCitaH.await();
             // podemos pasar a la sala de espera
             hayHombre=true;
             System.out.println("El hombre "+id+" espera en la sala.");
@@ -29,9 +32,10 @@ public class Sala {
                 puerta=false;
                 cita=true;
                 System.out.println("El hombre "+id+" ha tenido una cita.");
-                notifyAll();// desbloqueamos a la mujer.
+                okCitaM.signalAll();// desbloqueamos a la mujer.
             }else {// no hay mujer esperando.
-                while(!cita)wait();
+                System.out.println("El hombre "+id+" espera pacientemente.");
+                while(cita) okCitaH.await();
                 System.out.println("El hombre "+id+" ha tenido una cita.");
                 cita=false;
             }
@@ -40,7 +44,7 @@ public class Sala {
             System.out.println("El hombre "+id+" sale de la sala.");
             if(!hayHombre && !hayMujer) {
                 puerta=true;
-                notifyAll();
+                okCitaH.signalAll();
             }
         } finally {
             l.unlock();
@@ -56,16 +60,17 @@ public class Sala {
 	public synchronized void llegaMujer(int id) throws InterruptedException {
         try {
             l.lock();
-            while(hayMujer || !puerta)wait();
+            while(hayMujer || !puerta) okCitaM.await();
             hayMujer=true;
             System.out.println("La mujer "+id+" espera en la sala.");
             if(hayHombre) {
                 puerta=false;
                 cita=true;
                 System.out.println("La mujer  "+id+" ha tenido una cita.");
-                notifyAll();//desbloqueamos al hombre.
+                okCitaH.signalAll();//desbloqueamos al hombre.
             }else {// no hay mujer esperando.
-                while(!cita)wait();
+                System.out.println("La mujer "+id+" espera pacientemente.");
+                while(cita) okCitaM.await();
                 System.out.println("La mujer  "+id+" ha tenido una cita.");
                 cita=false;
             }
@@ -73,7 +78,7 @@ public class Sala {
             System.out.println("La mujer "+id+" sale de la sala.");
             if(!hayMujer && !hayHombre) {
                 puerta=true;
-                notifyAll();
+                okCitaM.signalAll();
             }
         } finally {
             l.unlock();
