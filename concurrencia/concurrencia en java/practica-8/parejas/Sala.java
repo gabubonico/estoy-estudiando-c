@@ -21,9 +21,9 @@ public class Sala {
 	 * @throws InterruptedException
 	 */
 	public synchronized void llegaHombre(int id) throws InterruptedException {
+        while(hayHombre || !puerta) okCitaH.await();
         try {
             l.lock();
-            while(hayHombre || !puerta) okCitaH.await();
             // podemos pasar a la sala de espera
             hayHombre=true;
             System.out.println("El hombre "+id+" espera en la sala.");
@@ -58,9 +58,9 @@ public class Sala {
 	 * @throws InterruptedException
 	 */
 	public synchronized void llegaMujer(int id) throws InterruptedException {
+        while(hayMujer || !puerta) okCitaM.await();
         try {
             l.lock();
-            while(hayMujer || !puerta) okCitaM.await();
             hayMujer=true;
             System.out.println("La mujer "+id+" espera en la sala.");
             if(hayHombre) {
