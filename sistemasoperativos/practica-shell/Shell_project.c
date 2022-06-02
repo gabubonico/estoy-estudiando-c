@@ -35,7 +35,7 @@ void manejador (int senal) {
 
 	for (int i = 1; i <= list_size(tareas); i++) {
 		item = get_item_bypos(tareas, i);			
-		pid_wait = waitpid(item->pgid, &status, WUNTRACED | WNOHANG);
+		pid_wait = waitpid(item->pgid, &status, WUNTRACED | WNOHANG | WCONTINUED);
 		if (pid_wait == item->pgid) {
 			status_res = analyze_status(status, &info);
 			if (status_res == EXITED) {
@@ -88,6 +88,10 @@ int main(void)
 
 		if(!strcmp(args[0], "cd")) {
 			chdir(args [1]);
+			continue;
+		}
+		if(!strcmp(args[0], "JOBS")) {
+			print_job_list(tareas);
 			continue;
 		}
 
