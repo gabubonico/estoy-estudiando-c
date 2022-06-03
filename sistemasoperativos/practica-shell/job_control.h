@@ -9,6 +9,8 @@ Dept. Arquitectura de Computadores - UMA
 Some code adapted from "Fundamentos de Sistemas Operativos", Silberschatz et al.
 --------------------------------------------------------*/
 
+// realizado por Gabriel Cortes Rodriguez
+
 #ifndef _JOB_CONTROL_H
 #define _JOB_CONTROL_H
 

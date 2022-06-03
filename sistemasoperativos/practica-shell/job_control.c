@@ -9,6 +9,8 @@ Dept. Arquitectura de Computadores - UMA
 Some code adapted from "Fundamentos de Sistemas Operativos", Silberschatz et al.
 --------------------------------------------------------*/
 
+// realizado por Gabriel Cortes Rodriguez
+
 #include "job_control.h"
 #ifndef __APPLE__
 #include <malloc.h>

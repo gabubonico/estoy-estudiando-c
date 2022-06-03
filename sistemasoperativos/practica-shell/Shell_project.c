@@ -14,6 +14,8 @@ To compile and run the program:
 
 **/
 
+// Realizado por Gabriel Cortes Rodriguez
+
 #include "job_control.h"   // remember to compile with module job_control.c 
 #include <signal.h>
 #include <stdio.h>
@@ -27,6 +29,7 @@ To compile and run the program:
 job * tareas;
 
 void manejador (int senal) {
+	block_SIGCHLD();
 	job * item;
 	int status;
 	int info;
@@ -47,6 +50,7 @@ void manejador (int senal) {
 			}	
 		}
 	}
+	unblock_SIGCHLD();
 }
 
 // -----------------------------------------------------------------------
@@ -65,6 +69,7 @@ int main(void)
 	int info;				/* info processed by analyze_status() */
 
 	job * item;
+	int primerplano = 0;
 
 	ignore_terminal_signals();
 	signal(SIGCHLD, manejador);
@@ -86,32 +91,78 @@ int main(void)
 			 (5) loop returns to get_commnad() function
 		*/
 
+		// COMANDOS INTERNOS
+		// cd
 		if(!strcmp(args[0], "cd")) {
 			chdir(args [1]);
 			continue;
 		}
+
+		// JOBS
 		if(!strcmp(args[0], "JOBS")) {
+			block_SIGCHLD();
 			print_job_list(tareas);
+			unblock_SIGCHLD();
 			continue;
 		}
 
-		pid_fork = fork();
+		// FG
+		if (!strcmp(args[0], "FG")) {
+			block_SIGCHLD();
+			int pos = 1;
+			primerplano = 1;
+			if (args[1] != NULL) {
+				pos = atoi(args[1]);
+			}
+			item = get_item_bypos(tareas, pos);
+			if (item != NULL) {
+				set_terminal(item->pgid);
+				if (item->state == STOPPED) {
+					killpg(item->pgid, SIGCONT);
+				}
+				pid_fork = item->pgid;
+				delete_job(tareas, item);
+			}
+			unblock_SIGCHLD();
+		}
+
+		// BG
+		if (!strcmp(args[0], "BG")) {
+			int pos = 1;
+			if (args[0] != NULL) {
+				pos = atoi(args[1]);
+			}
+			item = get_item_bypos(tareas, pos);
+			if ((item != NULL) && (item->state == STOPPED)) {
+				item->state = BACKGROUND;
+				killpg(item->pgid, SIGCONT);
+			}
+			continue;
+		}
+
+		if (!primerplano) 
+			pid_fork = fork();
 		if (pid_fork > 0) { //padre
 			if (background == 0) {
 				waitpid(pid_fork, &status, WUNTRACED);
 				set_terminal(getpid());
+				primerplano = 0;
 				status_res = analyze_status(status, &info);
 				if (status_res == SUSPENDED) {
+					block_SIGCHLD();
 					item = new_job(pid_fork, args[0], STOPPED);
 					add_job(tareas, item);
 					printf("\nForeground pid: %i, command: %s, %s, info: %i\n", pid_fork, args[0], status_strings[status_res], info);
+					unblock_SIGCHLD();
 				} else {
 					printf("\nForeground pid: %i, command: %s, %s, info: %i\n", pid_fork, args[0], status_strings[status_res], info);
 				}
 			} else {
+				block_SIGCHLD();
 				item = new_job(pid_fork, args[0], STOPPED);
 				add_job(tareas, item);
 				printf("\nBackground pid: %i, command: %s\n", pid_fork, args[0]);
+				unblock_SIGCHLD();
 				continue;
 			}	
 		} else { //hijo
