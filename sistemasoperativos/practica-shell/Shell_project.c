@@ -94,7 +94,9 @@ int main(void)
 		// COMANDOS INTERNOS
 		// cd
 		if(!strcmp(args[0], "cd")) {
-			chdir(args [1]);
+			if (chdir(args[1]) != 0) {
+				printf("\nError, dir not found\n");
+			}
 			continue;
 		}
 
@@ -140,6 +142,7 @@ int main(void)
 			continue;
 		}
 
+		// comandos normales
 		if (!primerplano) 
 			pid_fork = fork();
 		if (pid_fork > 0) { //padre
