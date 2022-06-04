@@ -101,7 +101,7 @@ int main(void)
 		}
 
 		// JOBS
-		if(!strcmp(args[0], "jobs")) {
+		if (!strcmp(args[0], "JOBS") || !strcmp(args[0], "jobs")) {
 			block_SIGCHLD();
 			print_job_list(tareas);
 			unblock_SIGCHLD();
