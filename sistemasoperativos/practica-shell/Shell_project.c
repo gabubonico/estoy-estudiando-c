@@ -42,10 +42,10 @@ void manejador (int senal) {
 		if (pid_wait == item->pgid) {
 			status_res = analyze_status(status, &info);
 			if (status_res == EXITED) {
-				printf("\ncommand %s executed background. Pid %d finished", item->command, item->pgid);		
+				printf("\ncommand %s executed background. Pid %d finished\n", item->command, item->pgid);		
 				delete_job(tareas, item);
 			} else if (status_res == SUSPENDED) {
-				printf("\ncommand %s executed background. Pid %d suspended", item->command, item->pgid);		
+				printf("\ncommand %s executed background. Pid %d suspended\n", item->command, item->pgid);		
 				item->state = STOPPED;	
 			}	
 		}
@@ -94,14 +94,14 @@ int main(void)
 		// COMANDOS INTERNOS
 		// cd
 		if(!strcmp(args[0], "cd")) {
-			if (chdir(args[1]) != 0) {
-				printf("\nError, dir not found\n");
+			if (chdir(args[1]) != 0 && args[1] != NULL) {
+					printf("Error, dir not found\n");
 			}
 			continue;
 		}
 
 		// JOBS
-		if(!strcmp(args[0], "JOBS")) {
+		if(!strcmp(args[0], "jobs")) {
 			block_SIGCHLD();
 			print_job_list(tareas);
 			unblock_SIGCHLD();
@@ -109,7 +109,7 @@ int main(void)
 		}
 
 		// FG
-		if (!strcmp(args[0], "FG")) {
+		if (!strcmp(args[0], "FG") || !strcmp(args[0], "fg")) {
 			block_SIGCHLD();
 			int pos = 1;
 			primerplano = 1;
@@ -129,9 +129,9 @@ int main(void)
 		}
 
 		// BG
-		if (!strcmp(args[0], "BG")) {
+		if (!strcmp(args[0], "BG") || !strcmp(args[0], "bg")) {
 			int pos = 1;
-			if (args[0] != NULL) {
+			if (args[1] != NULL) {
 				pos = atoi(args[1]);
 			}
 			item = get_item_bypos(tareas, pos);
@@ -155,16 +155,16 @@ int main(void)
 					block_SIGCHLD();
 					item = new_job(pid_fork, args[0], STOPPED);
 					add_job(tareas, item);
-					printf("\nForeground pid: %i, command: %s, %s, info: %i\n", pid_fork, args[0], status_strings[status_res], info);
+					printf("Foreground pid: %i, command: %s, %s, info: %i\n", pid_fork, args[0], status_strings[status_res], info);
 					unblock_SIGCHLD();
 				} else {
-					printf("\nForeground pid: %i, command: %s, %s, info: %i\n", pid_fork, args[0], status_strings[status_res], info);
+					printf("Foreground pid: %i, command: %s, %s, info: %i\n", pid_fork, args[0], status_strings[status_res], info);
 				}
 			} else {
 				block_SIGCHLD();
-				item = new_job(pid_fork, args[0], STOPPED);
+				item = new_job(pid_fork, args[0], BACKGROUND);
 				add_job(tareas, item);
-				printf("\nBackground pid: %i, command: %s\n", pid_fork, args[0]);
+				printf("Background pid: %i, command: %s\n", pid_fork, args[0]);
 				unblock_SIGCHLD();
 				continue;
 			}	
@@ -173,7 +173,7 @@ int main(void)
 			if (background == 0) set_terminal(getpid());
 			restore_terminal_signals();
 			execvp(inputBuffer, args);
-			printf("Error, command %s not found", args[0]);
+			printf("Error, command %s not found\n", args[0]);
 			exit(-1);
 		}
 
