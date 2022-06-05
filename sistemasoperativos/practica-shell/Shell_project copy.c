@@ -41,12 +41,12 @@ void manejador (int senal) {
 		pid_wait = waitpid(item->pgid, &status, WUNTRACED | WNOHANG | WCONTINUED);
 		if (pid_wait == item->pgid) {
 			status_res = analyze_status(status, &info);
-			if (status_res == EXITED || status_res == SIGNALED) {
-				printf("\ncommand %s executed background. Pid %d finished\n", item->command, item->pgid);	
-				delete_job(tareas, item);	
+			if (status_res == EXITED) {
+				delete_job(tareas, item);
+				printf("\ncommand %s executed background. Pid %d finished\n", item->command, item->pgid);		
 			} else if (status_res == SUSPENDED) {
+				item->state = STOPPED;	
 				printf("\ncommand %s executed background. Pid %d suspended\n", item->command, item->pgid);		
-				item->state = STOPPED;
 			} else if(status_res == CONTINUED){
 				printf("\nCommand %s executed in Background with PID %d has continued\n", item->command, item->pgid);
 				item->state = BACKGROUND;
@@ -72,6 +72,7 @@ int main(void)
 	int info;				/* info processed by analyze_status() */
 
 	job * item;
+	int primerplano = 0;
 
 	ignore_terminal_signals();
 	signal(SIGCHLD, manejador);
@@ -103,7 +104,7 @@ int main(void)
 		}
 
 		// JOBS
-		if (!strcmp(args[0], "jobs")) {
+		if (!strcmp(args[0], "JOBS") || !strcmp(args[0], "jobs")) {
 			block_SIGCHLD();
 			print_job_list(tareas);
 			unblock_SIGCHLD();
@@ -111,41 +112,27 @@ int main(void)
 		}
 
 		// FG
-		if (!strcmp(args[0], "fg")) {
-			job *item;
-			int n = 1;
-			if(args[1] != NULL){
-				n = atoi(args[1]);
+		if (!strcmp(args[0], "FG") || !strcmp(args[0], "fg")) {
+			block_SIGCHLD();
+			int pos = 1;
+			primerplano = 1;
+			if (args[1] != NULL) {
+				pos = atoi(args[1]);
 			}
-			if(1<=n && n<=list_size(tareas)){
-				item = get_item_bypos(tareas, n);
-				int itempid = item->pgid;
-				char *itemcommand= strdup(item->command);
+			item = get_item_bypos(tareas, pos);
+			if (item != NULL) {
 				set_terminal(item->pgid);
-				delete_job(tareas, item);
-				killpg(itempid, SIGCONT);
-				waitpid(itempid, &status, WUNTRACED);
-				status_res = analyze_status(status, &info);
-
-				if(status_res == SUSPENDED){
-					item=new_job(itempid, itemcommand, STOPPED);
-					add_job(tareas , item);
-					printf("Foreground pid: %d, command %s, %s, info: %d \n", itempid, itemcommand, status_strings[status_res], info);
-				} else if(status_res == EXITED) {
-					if(info!=255){
-						printf("Foreground pid: %d, command %s, %s, info: %d \n", itempid, itemcommand, status_strings[status_res], info);
-					}
+				if (item->state == STOPPED) {
+					killpg(item->pgid, SIGCONT);
 				}
-				free(itemcommand);
-				set_terminal(getpid());
-			} else {
-				printf("Process %d not found \n", n);
+				pid_fork = item->pgid;
+				delete_job(tareas, item);
 			}
-		continue;
+			unblock_SIGCHLD();
 		}
 
 		// BG
-		if (!strcmp(args[0], "bg")) {
+		if (!strcmp(args[0], "BG") || !strcmp(args[0], "bg")) {
 			int pos = 1;
 			if (args[1] != NULL) {
 				pos = atoi(args[1]);
@@ -159,11 +146,13 @@ int main(void)
 		}
 
 		// comandos normales
-		pid_fork = fork();
+		if (!primerplano) 
+			pid_fork = fork();
 		if (pid_fork > 0) { //padre
 			if (background == 0) {
 				waitpid(pid_fork, &status, WUNTRACED);
 				set_terminal(getpid());
+				primerplano = 0;
 				status_res = analyze_status(status, &info);
 				if (status_res == SUSPENDED) {
 					block_SIGCHLD();
