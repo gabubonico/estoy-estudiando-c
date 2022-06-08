@@ -46,6 +46,10 @@ void manejador (int senal) {
 			status_res = analyze_status(status, &info);
 			if (status_res == EXITED) {
 				printf("\ncommand %s executed background. Pid %d finished\n", item->command, item->pgid);	
+				if (!already) {
+					contador++;	
+				}
+				already = 0;
 				delete_job(tareas, item);	
 			}else if (status_res == SIGNALED) {
 				printf("\ncommand %s executed background. Pid %d finished\n", item->command, item->pgid);
@@ -170,6 +174,24 @@ int main(void)
 			continue;
 		}
 
+		// killalljobs
+		if (!strcmp(args[0], "killalljobs")) {
+			block_SIGCHLD();
+
+			job * iter;
+			job * aux = tareas;
+
+			while (iter != NULL) {
+				iter = aux->next;
+				delete_job(tareas, aux);
+				killpg(aux->pgid, SIGSEGV);
+				aux = iter;
+			}
+
+			unblock_SIGCHLD();
+			continue;
+		}
+
 		// comandos normales
 		pid_fork = fork();
 		if (pid_fork > 0) { //padre
@@ -186,15 +208,18 @@ int main(void)
 				} else {
 					printf("Foreground pid: %i, command: %s, %s, info: %i\n", pid_fork, args[0], status_strings[status_res], info);
 				}
+				contador++;
+				already = 1;
 			} else {
 				block_SIGCHLD();
 				item = new_job(pid_fork, args[0], BACKGROUND);
 				add_job(tareas, item);
 				printf("Background pid: %i, command: %s\n", pid_fork, args[0]);
 				unblock_SIGCHLD();
+				contador++;
+				already = 1;
 				continue;
 			}	
-			already = 1;
 		} else { //hijo
 			new_process_group(getpid()); 
 			if (background == 0) set_terminal(getpid());
