@@ -26,7 +26,10 @@ To compile and run the program:
 
 #define MAX_LINE 256 /* 256 chars per line, per command, should be enough. */
 
+// variables globales :P
 job * tareas;
+int contador;
+int already;
 
 void manejador (int senal) {
 	block_SIGCHLD();
@@ -41,8 +44,11 @@ void manejador (int senal) {
 		pid_wait = waitpid(item->pgid, &status, WUNTRACED | WNOHANG | WCONTINUED);
 		if (pid_wait == item->pgid) {
 			status_res = analyze_status(status, &info);
-			if (status_res == EXITED || status_res == SIGNALED) {
+			if (status_res == EXITED) {
 				printf("\ncommand %s executed background. Pid %d finished\n", item->command, item->pgid);	
+				delete_job(tareas, item);	
+			}else if (status_res == SIGNALED) {
+				printf("\ncommand %s executed background. Pid %d finished\n", item->command, item->pgid);
 				delete_job(tareas, item);	
 			} else if (status_res == SUSPENDED) {
 				printf("\ncommand %s executed background. Pid %d suspended\n", item->command, item->pgid);		
@@ -158,6 +164,12 @@ int main(void)
 			continue;
 		}
 
+		// cont
+		if (!strcmp(args[0], "cont")) {
+			printf("%d jobs finished in this sesion.\n", contador);
+			continue;
+		}
+
 		// comandos normales
 		pid_fork = fork();
 		if (pid_fork > 0) { //padre
@@ -182,6 +194,7 @@ int main(void)
 				unblock_SIGCHLD();
 				continue;
 			}	
+			already = 1;
 		} else { //hijo
 			new_process_group(getpid()); 
 			if (background == 0) set_terminal(getpid());

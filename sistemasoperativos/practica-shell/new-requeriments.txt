@@ -1,0 +1,10 @@
+son 4 ejercicios en el 1  era poner un printf sencillito pa las tareas de segundo plano 
+cuando exited | signaled, luego en el 2 era tener un contador para las tareas de primer 
+plano a los que les mandabas una señal y había que tenerlo en cuenta también 
+con las tareas que están en segundo plano y las pasas a primer plano, y el 3 y 4 
+era primero hacer un comando interno de intentar matar a todas las tareas de segundo 
+plano y mostrar con un contador cuántas habías intentado matar, luego era que cada 
+vez que intentaba matar a una tarea en segundo plano pues se guardaba una línea diciendo
+que la tarea con pid nose q se ha intentado matar con killbg (el comando que has hecho) 
+en un fichero (te dan  en el ejercicio el cómo se crea un fichero y cómo se guarda la 
+info vaya, es más fácil de lo que parece)
