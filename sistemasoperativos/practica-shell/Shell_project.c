@@ -176,19 +176,18 @@ int main(void)
 
 		// killalljobs
 		if (!strcmp(args[0], "killalljobs")) {
-			block_SIGCHLD();
+			// block_SIGCHLD();
 
 			job * iter;
 			job * aux = tareas;
 
 			while (iter != NULL) {
 				iter = aux->next;
-				delete_job(tareas, aux);
-				killpg(aux->pgid, SIGSEGV);
+				killpg(aux->pgid, SIGKILL);
 				aux = iter;
 			}
 
-			unblock_SIGCHLD();
+			// unblock_SIGCHLD();
 			continue;
 		}
 
