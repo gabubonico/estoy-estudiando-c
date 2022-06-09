@@ -1,0 +1,26 @@
+start    (
+es_avion(a1),
+es_avion(a2),
+es_cargamento(c1),
+es_cargamento(c2),
+es_negro(c1),
+es_negro(c2),
+es_aeropuerto(agp),
+es_aeropuerto(mad),
+es_aeropuerto(bcn),
+es_planta(p),
+libre(p),
+esta_en(a1, agp),
+esta_en(c1, agp),
+esta_en(a2, bcn),
+esta_en(c2, bcn),
+esta_en(p, mad)
+)
+
+goal( 
+esta_en(c1, bcn),
+esta_en(c2, agp),
+es_blanco(c1),
+es_blanco(c2)
+)
+

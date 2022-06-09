@@ -1,0 +1,26 @@
+operator cargar(C,A,AP)
+pre:     es_cargamento(C), es_avion(A), es_aeropuerto(AP), esta_en(C,AP), esta_en(A,AP)
+post:    ~esta_en(C,AP), en_bodega_de_avion(C,A)
+
+operator descargar(C,A,AP)
+pre:     es_cargamento(C), es_avion(A), es_aeropuerto(AP), en_bodega_de_avion(C,A), esta_en(A,AP)
+post:    esta_en(C,AP), ~en_bodega_de_avion(C,A)
+
+operator volar(A,Origen,Destino)
+pre:     es_avion(A), es_aeropuerto(Origen), es_aeropuerto(Destino), esta_en(A,Origen)
+post:    ~esta_en(A,Origen), esta_en(A,Destino)
+
+operator transportarIda(A,C,P)
+pre:     esta_en(P, A), esta_en(C, A), es_negro(C), libre(P)
+post:    esta_en(C, P), ~esta_en(C, A), ~libre(P)
+
+operator pintar(C,P)
+pre:	 es_cargamento(C), es_planta(P), esta_en(C,P)
+post:    ~es_negro(C), es_blanco(C)
+
+operator transportarVuelta(C,P,A)
+pre:     es_cargamento(C), es_planta(P), es_aeropuerto(A), esta_en(C,P), es_blanco(C), esta_en(P,A)
+post:    ~esta_en(C, P), esta_en(C, A), libre(P)
+
+
+
